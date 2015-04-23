@@ -5,8 +5,8 @@ print(raw.info)
 print('\n')
 
 # Raw plot
-# raw.plot()
+    # raw.plot()
 
-# raw.save('raw_recordings.fif', tmin=tmin, tmax=tmax, picks=picks, overwrite=True) 
-
-
+# Save file
+    # Used to avoid reloading data
+    # raw.save('raw_recordings.fif', tmin=tmin, tmax=tmax, picks=picks, overwrite=True) 
