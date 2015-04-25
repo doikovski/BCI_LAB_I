@@ -1,12 +1,21 @@
+# MNE - Data aquisition
 import mne
 
+# Tools
 import numpy as np
 import matplotlib.pyplot as plt
+import multiprocessing as mp
 
-from mne.time_frequency import induced_power
+# SKLEARN - Machine learning
+    # import sklearn as sk
 
 # ======= NOTE =======
 
+# Multiprocessing required to continue with execution while keeping graphs
+
+# For LaTeX fonts
+    # plt.rc('text', usetex=True)
+    # plt.rc('font', family='serif')
 
 # ======= BDF file =======
 
@@ -41,6 +50,9 @@ n_cycles = 2  # number of cycles in Morlet wavelet
 frequencies = np.arange(7, 30, 3)  # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz
 
+# Electrode from picks used for graphs
+picks_tfr = [0]
+
 execfile('Process/frequency.py')
 
-# ======= Classifer =======
+# ======= Machine learning =======

@@ -11,7 +11,18 @@ print('\n')
     # events = mne.read_events('events.fif')
 
 # Plot raw EEG data with event markers
-fig_rawdata = raw.plot(events=events,block=False)
+def PlotRawData(raw, events):
+    fig_rawdata = raw.plot(events=events,
+                           event_color= 'r', 
+                           show_options='True', 
+                           title='Raw data')
+    plt.show()
+
+print 'plot_rawdata: Creating new process'
+plot_rawdata = mp.Process(target=PlotRawData,args=[raw,events])
+print 'plot_rawdata: Starting new process'
+plot_rawdata.start()
+print 'plot_rawdata: Process created\n'
 
 event_id = {'INIT': 255,
 	    'CUE': 254, 
@@ -44,7 +55,22 @@ print 'Total Standing time:', event_stand_go_time_total, 'seconds'
 print '\n'
 
 # Plot events
-fig_events = mne.viz.plot_events(events, 
-				  raw.info['sfreq'], 
-				  raw.first_samp, 
-				  event_id=event_id) # could add show=false
+def PlotEvents(raw, events, event_id):
+    fig_events = mne.viz.plot_events(events,
+                                     raw.info['sfreq'],
+                                     raw.first_samp,
+                                     event_id=event_id,
+                                     show=False)
+    plt.title('Events')
+    plt.show()
+
+print 'plot_events: Creating new process'
+plot_events = mp.Process(target=PlotEvents,args=[raw, events, event_id])
+print 'plot_events: Starting new process'
+plot_events.start()
+print 'plot_events: Process created\n'
+
+
+
+
+
