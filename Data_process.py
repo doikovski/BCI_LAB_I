@@ -47,7 +47,7 @@ execfile('Process/epochs.py')
 # ======= Frequency =======
 
 n_cycles = 2  # number of cycles in Morlet wavelet
-frequencies = np.arange(7, 30, 3)  # frequencies of interest
+frequencies = np.arange(2, 40, 2) # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz
 
 # Electrode from picks used for graphs
@@ -56,3 +56,6 @@ picks_tfr = [0]
 execfile('Process/frequency.py')
 
 # ======= Machine learning =======
+
+execfile('Process/ml_features.py')
+execfile('Process/ml_classification.py')
