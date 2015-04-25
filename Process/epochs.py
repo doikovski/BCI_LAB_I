@@ -25,42 +25,14 @@ epochs = mne.Epochs(raw,
 # epochs = mne.Epochs(raw, events, event_id, tmin, tmax)
 
 # Save epochs to avoid recalculating later
-# epochs.save('epochs.fif')
-# saved_epochs = mne.read_epochs('sample-epo.fif')
+    # epochs.save('epochs.fif')
+    # saved_epochs = mne.read_epochs('sample-epo.fif')
 
 print('\n')
 print(epochs)
 print('\n\n')
 
-
-# QUESTION: WHAT ARE EVOKES AND ARE THEY NECESSARY?
-
 epoch_sit = epochs['SIT_GO']
-# epoch_stand = epochs['STAND_GO'].average()
+epoch_stand = epochs['STAND_GO']
 
 print(epoch_sit)
-
-# Removed because FFT plot uses previous variable
-# epoch_sit_data = epoch_sit.get_data()
-# print(epoch_sit_data)
-
-'''
-evoked_sit = epoch_sit.average()
-print(evoked_sit)
-evoked_sit.plot()
-'''
-
-'''
-evoked = epochs.average() # Average to create Evoked 
-cov = mne.compute_covariance(epochs, tmax=0)  # Calculate baseline covariance 
-forward = mne.make_forward_solution(evoked.info, mri, src, bem, mindist=5.0)  
-inverse = mne.minimum_norm.make_inverse_operator(evoked.info, forward, cov)  
-stc = mne.minimum_norm.apply_inverse(evoked, inverse,  
-                                         lambda2=1. / 9.)  # Source estimates 
-'''
-'''
-events2 = mne.find_events(raw, stim_channel='STI 014')
-print(events[:5])
-event_id2 = dict(ST_READY=1, SIT_GO=2)
-'''
-

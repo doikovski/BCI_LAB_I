@@ -1,5 +1,10 @@
 import mne
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+from mne.time_frequency import induced_power
+
 # ======= NOTE =======
 
 
@@ -9,7 +14,7 @@ import mne
 Recording = 'Process/Recording.bdf'
 execfile('Process/bdf_read.py')
 
-# Low-pass filter at 40 Hz, use only for visualisation of raw data
+# Low-pass filter at 40 Hz, use only for visualisation of raw data (not for analysis)
     # raw.filter(None, 40)  # Low-pass filter
 
 # Electrodes used for processing
@@ -24,13 +29,17 @@ baseline = None # means from the first instant to t = 0
 # Event time for data analysis
     # Event Times : events[:,0]/2048
     # Event types : events[:,2]
-tmin, tmax = 0, 5
+tmin, tmax = -2, 5
 
 # Events and epochs
 execfile('Process/events.py')
 execfile('Process/epochs.py')
 
-# ======= Feature extraction =======
+# ======= Frequency =======
+
+n_cycles = 2  # number of cycles in Morlet wavelet
+frequencies = np.arange(7, 30, 3)  # frequencies of interest
+Fs = raw.info['sfreq']  # sampling in Hz
 
 execfile('Process/frequency.py')
 
