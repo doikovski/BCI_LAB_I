@@ -1,0 +1,163 @@
+% Use only LaTeX2e, calling the article.cls class and 12-point type.
+% Déclaration du type de document (report, book, paper, etc...)
+\documentclass[a4paper, 12pt, english]{article}
+ 
+% Package pour avoir Latex en français
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+ 
+\usepackage[table]{xcolor}
+
+\usepackage{babel}
+\usepackage[babel=true]{csquotes}
+
+% Quelques packages utiles
+\usepackage{listings} % Pour afficher des listings de programmes
+\usepackage{graphicx} % Pour afficher des figures
+\graphicspath{{figures/}} % Set the default folder for images
+\usepackage{microtype} % Optical margins FTW
+\usepackage{url}
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables for horizontal lines
+\usepackage[per-mode=symbol]{siunitx}
+\usepackage{floatrow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{fullpage}
+\usepackage{lipsum}
+\usepackage{multirow}
+
+
+\usepackage{placeins}% to flush figure with floatbarrier
+
+\usepackage{enumerate}
+\usepackage{subfig} % Required for creating figures with multiple parts (subfigures)
+\usepackage{amsmath,amssymb,amsthm} % For including math equations, theorems, symbols, etc
+\usepackage[margin=2.8cm]{geometry}
+
+\usepackage{booktabs} % for table ?
+
+\usepackage{mathtools}
+
+\usepackage{array}
+
+\usepackage[ruled,vlined, linesnumbered]{algorithm2e}
+
+
+\newcommand{\cb}[1]{{\cellcolor{black! #1 }$ #1 \%$}}
+\newcommand{\cw}[1]{{\cellcolor{black! #1 }$ \color{white} #1 \%$}}
+
+\newcommand\MyBox[2]{
+  \fbox{\lower0.75cm
+    \vbox to 1.7cm{\vfil
+      \hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+      \vfil}%
+  }%
+}
+
+\setlength{\parskip}{2pt} % set space between paragraphs. Default is 15pt.
+
+
+
+\newcommand{\head}[1]{\textbf{#1}} % for table
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+\addto\captionsenglish{%
+\renewcommand{\figurename}{fig.}}
+\addto\captionsenglish{%
+\renewcommand{\tablename}{tab.}}
+
+%\renewcommand{\figurename}{fig.}
+%\renewcommand{\figurename}{Fig.{}}
+
+% Include your paper's title here
+
+\title{\Huge Brain Computer Interface \\ 
+\LARGE Notes for the project} 
+
+
+% Place the author information here.  Please hand-code the contact
+% information and notecalls; do *not* use \footnote commands.  Let the
+% author contact information appear immediately below the author names
+% as shown.  We would also prefer that you don't change the type-size
+% settings shown here.
+
+\author
+{Dorian Konrad, Jonathan Arreguit, Salif Komi, Tristan Barjavel\\
+\normalsize{EPFL, Switzerland}\\}
+
+% Include the date command, but leave its argument blank.
+
+\date{}
+
+%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%
+
+
+\begin{document} 
+
+
+% Make the title.
+\maketitle
+
+
+%------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+\section{Procedure}
+%------------------------------------------------------------------------------
+%-------------
+
+Algorithm \ref{code:1} show the procedure to apply in order to analysis the data and build a model classifier. Here, we mean by sample's dimensions, the number of features. This number equal the number of electrodes multiplied by the number of discretised frequencies. This is similar to the feature approach we used when classifying image samples.
+
+\begin{algorithm}
+ Read RAW Data\;
+ Read Events\;
+ Define Epochs\;
+ \For{all Epochs}{
+  \For{All 1s window in Epoch (separate by 0.2s)}
+  {
+  	Apply Spacial Filter (CAR, Little Laplacian or Big Laplacian)\;
+  	Apply Frequencial Filter\;
+  	Save window data as a Sample\;
+  }
+ }
+
+ Separate sample in train and test set\;
+
+ \For{All sample's Dimensions}{
+ 	Apply statistical tests (univariate criterion) to determin importance of selected feature\;
+ 	Keep feature if p-value is lower than 5\%\;
+ }
+
+ \For{All kept Features}{
+ 	Apply sequential feature selection using a Wrapper (forward search and backward search)\;
+ 	Train a classifier (linear, diaglinear, quadratic, diagquadratic and mahalanobis)\;
+ 	Evaluate performance using cross-validation set\;
+ }
+
+ Keep best features set and best classifier\;
+
+ \caption{Procedure for pre-processing and data analysis \label{code:1}}
+\end{algorithm}
+
+
+\FloatBarrier
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
