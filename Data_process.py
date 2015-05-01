@@ -4,10 +4,21 @@ import mne
 # Tools
 import numpy as np
 import matplotlib.pyplot as plt
-import multiprocessing as mp
 
 # SKLEARN - Machine learning
     # import sklearn as sk
+
+# Optional packages
+FLAG_MP = False # Flag used to plot figures using multiprocessing, not for Windows or iOS
+if FLAG_MP:
+    import multiprocessing as mp
+
+# FLAGS
+FLAG_PLOT = True
+
+if FLAG_PLOT and FLAG_MP:
+    import sys
+    sys.exit("ERROR, FLAG_PLOT and FLAG_MP cannot be both used at the same time")
 
 # ======= NOTE =======
 
@@ -21,6 +32,7 @@ import multiprocessing as mp
 
 # File path and reading
 Recording = 'Process/Recording.bdf'
+    # Used paths: Process/Recording.bdf
 execfile('Process/bdf_read.py')
 
 # Low-pass filter at 40 Hz, use only for visualisation of raw data (not for analysis)
