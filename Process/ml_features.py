@@ -36,3 +36,18 @@ elif FLAG_PLOT:
         # 64 electrodes
 
 # sample_sit[n_channel][freq]=amplitude
+
+# USE ICA -> Indpendent extraction
+#mne.preprocessing.ICA.fit(inst, 
+                          #picks=picks, 
+                          #start=None, 
+                          #stop=None, 
+                          #decim=None, 
+                          #reject=None, 
+                          #flat=None, 
+                          #tstep=2.0, 
+                          #verbose=None)
+
+
+
+

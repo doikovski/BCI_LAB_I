@@ -14,7 +14,7 @@ if FLAG_MP:
     import multiprocessing as mp
 
 # FLAGS
-FLAG_PLOT = True
+FLAG_PLOT = False
 
 if FLAG_PLOT and FLAG_MP:
     import sys
@@ -22,7 +22,11 @@ if FLAG_PLOT and FLAG_MP:
 
 # ======= NOTE =======
 
-# Multiprocessing required to continue with execution while keeping graphs
+# Multiprocessing
+    # Multiprocessing is used when FLAG_MP is True and allows to continue processing
+    # while plotting
+    # The alternative is to use the FLAG_PLOT (True) to plot without using multiprocessing, 
+    # but the execution will stop at each plot until the windows is closed
 
 # For LaTeX fonts
     # plt.rc('text', usetex=True)
@@ -41,7 +45,7 @@ execfile('Process/bdf_read.py')
 # Electrodes used for processing
     # picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
     # picks = None # Uses all electrodes
-picks = [2,3,4] # For quick development
+picks = [4,5,9] # For quick development
 print 'Electrodes used:', picks
 
 # Baseline
@@ -50,20 +54,23 @@ baseline = None # means from the first instant to t = 0
 # Event time for data analysis
     # Event Times : events[:,0]/2048
     # Event types : events[:,2]
-tmin, tmax = -2, 5
+tmin, tmax = -2, 5 # in secoonds
+sampling_time = 2048
 
 # Events and epochs
 execfile('Process/events.py')
 execfile('Process/epochs.py')
+
+# Spatial filtering
+execfile('Process/spatial_filter.py') # WIP
+#raw.plot_psds(tmin=0.0, tmax=10.0, fmin=0, fmax=40, picks=[0]) # Check effect of spatial filtering
 
 # ======= Frequency =======
 
 n_cycles = 2  # number of cycles in Morlet wavelet
 frequencies = np.arange(2, 40, 2) # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz
-
-# Electrode from picks used for graphs
-picks_tfr = [0]
+picks_tfr = [0] # Electrode from picks used for graphs # From 0 to len(picks)-1
 
 execfile('Process/frequency.py')
 

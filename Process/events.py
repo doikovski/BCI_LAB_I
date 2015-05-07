@@ -52,13 +52,13 @@ event_sit_go_time_total = 0
 event_stand_go_time_total = 0
 for i in range(len(events[:,0])):
     if events[i,2] == 238:
-        print i, 'Event SIT_GO from time', events[i,0]/2048
-        event_sit_go_time.append([events[i,0]/2048,events[i+1,0]/2048])
-        event_sit_go_time_total += (events[i+1,0] - events[i,0])/2048
+        print i, 'Event SIT_GO from time', events[i,0]/sampling_time
+        event_sit_go_time.append([events[i,0]/sampling_time,events[i+1,0]/sampling_time])
+        event_sit_go_time_total += (events[i+1,0] - events[i,0])/sampling_time
     elif events[i,2] == 240:
-        print i, 'Event STAND_GO at time', events[i,0]/2048
-        event_stand_go_time.append([events[i,0]/2048,events[i+1,0]/2048])
-        event_stand_go_time_total += (events[i+1,0] - events[i,0])/2048
+        print i, 'Event STAND_GO at time', events[i,0]/sampling_time
+        event_stand_go_time.append([events[i,0]/sampling_time,events[i+1,0]/sampling_time])
+        event_stand_go_time_total += (events[i+1,0] - events[i,0])/sampling_time
 
 print 'Total Sitting time:', event_sit_go_time_total, 'seconds'
 print 'Total Standing time:', event_stand_go_time_total, 'seconds'
