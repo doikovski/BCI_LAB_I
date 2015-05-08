@@ -13,10 +13,11 @@ power_stand, itc_stand = mne.time_frequency.tfr_morlet(epochs=epoch_stand,
                                                    use_fft=True)
 print('DONE: calculating power & itc')
 
-# Plot TFT Morlet
-tmin_sit_first = event_sit_go_time[0][0]
+
+tmin_sit_first = event_sit_go_time[0][0] # NOTE only to obtain time
 tmax_sit_first = event_sit_go_time[0][1]
 
+# Plot TFT Morlet
 print('Plotting TFT Morlet graphs')
 
 #power_sit.plot([0], baseline=(-0.5, 0), mode=None)
@@ -38,9 +39,10 @@ if FLAG_MP:
 
 elif FLAG_PLOT:
     fig_power_sit = power_sit.plot(picks=picks_tfr, # From 0 to n_electrodes_used-1
-                                #tmin=tmin, tmax=tmax, 
+                                tmin=-1, tmax=3, 
                                 #fmin=00, fmax=30, 
                                 #vmin=0, vmax=0.0000001, 
+                                vmin=-250,vmax=-150,
                                 dB=True,
                                 show=False)
     plt.title('Averaged power from TFR MORLET')
@@ -73,11 +75,11 @@ elif FLAG_PLOT:
 print('DONE: Calculating frequency and plotting corresponding graphs\n')
 
 # PSD estimator (Alternative to TFR Morlet)
-    #mne.decoding.PSDEstimator(sfreq=Fs, 
-                            #fmin=0, fmax=40, 
-                            #bandwidth=None, 
-                            #adaptive=False, 
-                            #low_bias=True, 
-                            #n_jobs=1, 
-                            #normalization='length', 
-                            #verbose=None)
+PSDE = mne.decoding.PSDEstimator(sfreq=Fs, 
+                            fmin=0, fmax=40, 
+                            bandwidth=None, 
+                            adaptive=False, 
+                            low_bias=True, 
+                            n_jobs=1, 
+                            normalization='length', 
+                            verbose=None)

@@ -10,3 +10,5 @@ print('\n')
 # Save file
     # Used to avoid reloading data
     # raw.save('raw_recordings.fif', tmin=tmin, tmax=tmax, picks=picks, overwrite=True) 
+
+#raw.plot_psds(tmin=100.0,tmax=101.0,fmin=1,fmax=40,picks=picks,n_fft=2048)

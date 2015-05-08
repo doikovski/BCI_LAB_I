@@ -14,7 +14,7 @@ if FLAG_MP:
     import multiprocessing as mp
 
 # FLAGS
-FLAG_PLOT = False
+FLAG_PLOT = True
 
 if FLAG_PLOT and FLAG_MP:
     import sys
@@ -49,7 +49,7 @@ picks = [4,5,9] # For quick development
 print 'Electrodes used:', picks
 
 # Baseline
-baseline = None # means from the first instant to t = 0
+baseline = [0,1] # means from the first instant to t = 0
 
 # Event time for data analysis
     # Event Times : events[:,0]/2048
@@ -57,13 +57,16 @@ baseline = None # means from the first instant to t = 0
 tmin, tmax = -2, 5 # in secoonds
 sampling_time = 2048
 
+# Spatial filtering
+spatial_filter = 'CAR'
+pick_CAR = range(64) # Electrodes used to compute CAR for each time
+picks_spatial_filter = picks # Electrodes on which spatial filtering is applied
+execfile('Process/spatial_filter.py') # WIP
+#raw.plot_psds(tmin=0.0, tmax=10.0, fmin=0, fmax=40, picks=[4]) # Check effect of spatial filtering
+
 # Events and epochs
 execfile('Process/events.py')
 execfile('Process/epochs.py')
-
-# Spatial filtering
-execfile('Process/spatial_filter.py') # WIP
-#raw.plot_psds(tmin=0.0, tmax=10.0, fmin=0, fmax=40, picks=[0]) # Check effect of spatial filtering
 
 # ======= Frequency =======
 
