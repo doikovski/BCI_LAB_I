@@ -75,11 +75,37 @@ elif FLAG_PLOT:
 print('DONE: Calculating frequency and plotting corresponding graphs\n')
 
 # PSD estimator (Alternative to TFR Morlet)
+print('Computing PSDE\n')
 PSDE = mne.decoding.PSDEstimator(sfreq=Fs, 
-                            fmin=0, fmax=40, 
+                            fmin=f_min, fmax=f_max, 
                             bandwidth=None, 
                             adaptive=False, 
                             low_bias=True, 
                             n_jobs=1, 
                             normalization='length', 
                             verbose=None)
+
+PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
+PSDE_sit_transform = PSDE.transform(epoch_sit.get_data())
+PSDE_sit_transform[0][0] # [Numnber of event iterations (10)][Pick (Electrode)]
+
+if FLAG_PLOT:
+    plt.figure()
+    plot_freq = range(len(PSDE_sit_transform[0][0]))
+    for i in range(len(PSDE_sit_transform[0][0])):
+        plot_freq[i] *= 1.0
+        plot_freq[i] /= float(len(plot_freq))
+        plot_freq[i] *= f_max-f_min
+        plot_freq[i] += f_min
+    
+    for i in range(len(PSDE_sit_transform)):
+        plt.plot(plot_freq,PSDE_sit_transform[i][0],label=i)
+    #plt.legend('1','2','3','4','5','6','7','8','9','10')
+    plt.xlim([f_min,f_max])
+    plt.legend()
+    plt.title('Demonsration of features')
+    plt.xlabel('Frequency')
+    plt.ylabel('Amplitude')
+    plt.show(block=False)
+
+print('DONE: PSDE\n')

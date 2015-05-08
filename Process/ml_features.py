@@ -19,6 +19,7 @@ if FLAG_MP:
     plot_power_sit.start()
 
 elif FLAG_PLOT:
+    plt.figure()
     for i in range(3):
             for j in range(19):
                 for k in range(0,10241,1000):
@@ -28,7 +29,7 @@ elif FLAG_PLOT:
     plt.xlabel('Frequency')
     plt.ylabel('Amplitude')
     #plt.ylim([0,1e-8])
-    plt.show()
+    plt.show(block=False)
 
 # Sample:
     # (40)*64 features

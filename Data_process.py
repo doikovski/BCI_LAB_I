@@ -15,6 +15,7 @@ if FLAG_MP:
 
 # FLAGS
 FLAG_PLOT = True
+plt.ion()
 
 if FLAG_PLOT and FLAG_MP:
     import sys
@@ -45,7 +46,7 @@ execfile('Process/bdf_read.py')
 # Electrodes used for processing
     # picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
     # picks = None # Uses all electrodes
-picks = [4,5,9] # For quick development
+picks = [4,5,9] # NOTE For quick development
 print 'Electrodes used:', picks
 
 # Baseline
@@ -72,6 +73,7 @@ execfile('Process/epochs.py')
 
 n_cycles = 2  # number of cycles in Morlet wavelet
 frequencies = np.arange(2, 40, 2) # frequencies of interest
+f_min,f_max = 2.0, 40.0
 Fs = raw.info['sfreq']  # sampling in Hz
 picks_tfr = [0] # Electrode from picks used for graphs # From 0 to len(picks)-1
 
