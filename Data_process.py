@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # SKLEARN - Machine learning
-    # import sklearn as sk
+import sklearn.decomposition as skd
+import sklearn.svm as svm
 
 # Optional packages
 FLAG_MP = False # Flag used to plot figures using multiprocessing, not for Windows or iOS
@@ -14,7 +15,7 @@ if FLAG_MP:
     import multiprocessing as mp
 
 # FLAGS
-FLAG_PLOT = True
+FLAG_PLOT = False
 plt.ion()
 
 if FLAG_PLOT and FLAG_MP:
@@ -36,7 +37,10 @@ if FLAG_PLOT and FLAG_MP:
 # ======= BDF file =======
 
 # File path and reading
-Recording = 'Process/Recording.bdf'
+Recording1 = 'Process/Recording4.bdf'
+Recording2 = 'Process/Recording2.bdf'
+Recording3 = 'Process/Recording3.bdf'
+Recording4 = 'Process/Recording4.bdf'
     # Used paths: Process/Recording.bdf
 execfile('Process/bdf_read.py')
 
@@ -44,9 +48,9 @@ execfile('Process/bdf_read.py')
     # raw.filter(None, 40)  # Low-pass filter
 
 # Electrodes used for processing
-    # picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
+picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
     # picks = None # Uses all electrodes
-picks = [4,5,9] # NOTE For quick development
+#picks = [4,5,9] # NOTE For quick development
 print 'Electrodes used:', picks
 
 # Baseline

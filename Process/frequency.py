@@ -89,6 +89,8 @@ PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
 PSDE_sit_transform = PSDE.transform(epoch_sit.get_data())
 PSDE_sit_transform[0][0] # [Numnber of event iterations (10)][Pick (Electrode)]
 
+PSDE_stand_transform = PSDE.transform(epoch_stand.get_data())
+
 if FLAG_PLOT:
     plt.figure()
     plot_freq = range(len(PSDE_sit_transform[0][0]))
