@@ -15,7 +15,7 @@ if FLAG_MP:
     import multiprocessing as mp
 
 # FLAGS
-FLAG_PLOT = False
+FLAG_PLOT = True
 plt.ion()
 
 if FLAG_PLOT and FLAG_MP:

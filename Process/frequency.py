@@ -2,12 +2,12 @@ print('\n\t============ Frequency analysis ============\n')
 
 # TFR Morlet
 print('Caclculating TFR Morlet')
-power_sit, itc_sit = mne.time_frequency.tfr_morlet(epochs=epoch_sit, 
+power_sit, itc_sit = mne.time_frequency.tfr_morlet(inst=epoch_sit, 
                                                    freqs=frequencies, 
                                                    n_cycles=n_cycles,
                                                    use_fft=True)
 
-power_stand, itc_stand = mne.time_frequency.tfr_morlet(epochs=epoch_stand, 
+power_stand, itc_stand = mne.time_frequency.tfr_morlet(inst=epoch_stand, 
                                                    freqs=frequencies, 
                                                    n_cycles=n_cycles,
                                                    use_fft=True)
