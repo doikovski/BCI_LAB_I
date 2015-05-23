@@ -14,30 +14,13 @@ power_stand, itc_stand = mne.time_frequency.tfr_morlet(inst=epoch_stand,
 print('DONE: calculating power & itc')
 
 
-tmin_sit_first = event_sit_go_time[0][0] # NOTE only to obtain time
-tmax_sit_first = event_sit_go_time[0][1]
-
 # Plot TFT Morlet
 print('Plotting TFT Morlet graphs')
 
 #power_sit.plot([0], baseline=(-0.5, 0), mode=None)
 #plt.title('S-transform (power)')
 
-if FLAG_MP:
-    def PlotTfrPower(power_sit, picks_tfr):
-        fig_power_sit = power_sit.plot(picks=picks_tfr, # From 0 to n_electrodes_used-1
-                                #tmin=tmin, tmax=tmax, 
-                                #fmin=00, fmax=30, 
-                                #vmin=0, vmax=0.0000001, 
-                                dB=True,
-                                show=False)
-        plt.title('Averaged power from TFR MORLET')
-        plt.show() # block=False
-
-    plot_tfr_power = mp.Process(target=PlotTfrPower,args=[power_sit,picks_tfr])
-    plot_tfr_power.start()
-
-elif FLAG_PLOT:
+if FLAG_PLOT:
     fig_power_sit = power_sit.plot(picks=picks_tfr, # From 0 to n_electrodes_used-1
                                 tmin=-1, tmax=3, 
                                 #fmin=00, fmax=30, 
@@ -48,22 +31,7 @@ elif FLAG_PLOT:
     plt.title('Averaged power from TFR MORLET')
     plt.show() # block=False
 
-#itc_sit.plot([0], baseline=None, mode=None)
-#plt.title('S-transform (ITC)')
-
-if FLAG_MP:
-    def PlotTfrItc(itc_sit, picks_tfr):
-        fig_itc_sit = itc_sit.plot(picks=picks_tfr,
-                        #tmin=tmin, tmax=tmax, 
-                        #fmin=00, fmax=30, 
-                        vmin=0,
-                        show=False)
-        plt.title('Intertrial coherence (ITC) from TFR MORLET')
-        plt.show() # block=False
-
-    plot_tfr_itc = mp.Process(target=PlotTfrItc,args=[itc_sit,picks_tfr])
-    plot_tfr_itc.start()
-elif FLAG_PLOT:
+if FLAG_PLOT:
     fig_itc_sit = itc_sit.plot(picks=picks_tfr,
                         #tmin=tmin, tmax=tmax, 
                         #fmin=00, fmax=30, 
@@ -74,7 +42,7 @@ elif FLAG_PLOT:
 
 print('DONE: Calculating frequency and plotting corresponding graphs\n')
 
-# PSD estimator (Alternative to TFR Morlet)
+# PSD estimator 
 print('Computing PSDE\n')
 PSDE = mne.decoding.PSDEstimator(sfreq=Fs, 
                             fmin=f_min, fmax=f_max, 
@@ -85,11 +53,22 @@ PSDE = mne.decoding.PSDEstimator(sfreq=Fs,
                             normalization='length', 
                             verbose=None)
 
-PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
+#PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
 PSDE_sit_transform = PSDE.transform(epoch_sit.get_data())
-PSDE_sit_transform[0][0] # [Numnber of event iterations (10)][Pick (Electrode)]
+# [Numnber of event iterations (10)][Pick (Electrode)][amplitude] 
 
 PSDE_stand_transform = PSDE.transform(epoch_stand.get_data())
+
+# Nomalisation
+#
+#for i in range(len(PSDE_sit_transform)):
+#    for j in range(len(picks)):
+#        PSDE_sit_transform[i][j] /= PSDE_sit_transform[i][j].std()
+#        
+#for i in range(len(PSDE_stand_transform)):
+#    for j in range(len(picks)):
+#        PSDE_stand_transform[i][j] /= PSDE_stand_transform[i][j].std()
+        
 
 if FLAG_PLOT:
     plt.figure()
@@ -102,10 +81,10 @@ if FLAG_PLOT:
     
     for i in range(len(PSDE_sit_transform)):
         plt.plot(plot_freq,PSDE_sit_transform[i][0],label=i)
-    #plt.legend('1','2','3','4','5','6','7','8','9','10')
+    
     plt.xlim([f_min,f_max])
     plt.legend()
-    plt.title('Demonsration of features')
+    plt.title('sit PSDE for electrode 0')
     plt.xlabel('Frequency')
     plt.ylabel('Amplitude')
     plt.show(block=False)

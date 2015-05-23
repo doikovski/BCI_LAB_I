@@ -1,65 +1,7 @@
 print('\n\t============ Machine learning - Features ============\n') 
 
-# Example to use the obtained data
-    # Plot amplitude in function of frequencies
-if FLAG_MP:
-    def PlotPowerSit(power_sit):
-        for i in range(3):
-            for j in range(19):
-                for k in range(0,10241,1000):
-                    # power.data[j][k][l]: j:n_channels, k:n_freqs, l:n_times
-                    plt.plot(frequencies[j],power_sit.data[i][j][k],'bx-')
-        plt.title('Demonsration of features')
-        plt.xlabel('Frequency')
-        plt.ylabel('Amplitude')
-        #plt.ylim([0,1e-8])
-        plt.show()
-
-    plot_power_sit = mp.Process(target=PlotPowerSit,args=[power_sit])
-    plot_power_sit.start()
-
-elif FLAG_PLOT:
-    plt.figure()
-    for i in range(3):
-            for j in range(19):
-                for k in range(0,10241,1000):
-                    # power.data[j][k][l]: j:n_channels, k:n_freqs, l:n_times
-                    plt.plot(frequencies[j],power_sit.data[i][j][k],'bx-')
-    plt.title('Demonsration of features')
-    plt.xlabel('Frequency')
-    plt.ylabel('Amplitude')
-    #plt.ylim([0,1e-8])
-    plt.show(block=False)
-
-# Sample:
-    # (40)*64 features
-        # 40 frequencies
-        # 64 electrodes
-
-# sample_sit[n_channel][freq]=amplitude
-
-# USE ICA -> Indpendent extraction
-#mne.preprocessing.ICA.fit(inst, 
-                          #picks=picks, 
-                          #start=None, 
-                          #stop=None, 
-                          #decim=None, 
-                          #reject=None, 
-                          #flat=None, 
-                          #tstep=2.0, 
-                          #verbose=None)
-
 PSDE_sit_transform[0][0] # [Numnber of event iterations (10)][Pick (Electrode)][Amplitides]
 
-#sklearn.decomposition.FastICA(n_components=None, 
-                              #algorithm='parallel', 
-                              #whiten=True, 
-                              #fun='logcosh', 
-                              #fun_args=None, 
-                              #max_iter=200, 
-                              #tol=0.0001, 
-                              #w_init=None, 
-                              #random_state=None)
 
 data_ml = []
 
@@ -108,5 +50,3 @@ for axis in range(5):
             k = 10+10*j+i # 40 (instead of first 10) for 4 files
             plt.plot(data[i,axis],data[k,axis+1],'ro')
     plt.show(block=False)
-
-    

@@ -9,26 +9,11 @@ import matplotlib.pyplot as plt
 import sklearn.decomposition as skd
 import sklearn.svm as svm
 
-# Optional packages
-FLAG_MP = False # Flag used to plot figures using multiprocessing, not for Windows or iOS
-if FLAG_MP:
-    import multiprocessing as mp
-
 # FLAGS
 FLAG_PLOT = True
 plt.ion()
 
-if FLAG_PLOT and FLAG_MP:
-    import sys
-    sys.exit("ERROR, FLAG_PLOT and FLAG_MP cannot be both used at the same time")
-
 # ======= NOTE =======
-
-# Multiprocessing
-    # Multiprocessing is used when FLAG_MP is True and allows to continue processing
-    # while plotting
-    # The alternative is to use the FLAG_PLOT (True) to plot without using multiprocessing, 
-    # but the execution will stop at each plot until the windows is closed
 
 # For LaTeX fonts
     # plt.rc('text', usetex=True)
@@ -37,24 +22,37 @@ if FLAG_PLOT and FLAG_MP:
 # ======= BDF file =======
 
 # File path and reading
-Recording1 = 'Process/Recording4.bdf'
-Recording2 = 'Process/Recording2.bdf'
-Recording3 = 'Process/Recording3.bdf'
-Recording4 = 'Process/Recording4.bdf'
+Recording1 = 'Process/Recording2.bdf'
     # Used paths: Process/Recording.bdf
-execfile('Process/bdf_read.py')
+
+raw = mne.io.read_raw_edf(Recording1, preload=True)
+#raw2 = mne.io.read_raw_edf(Recording2, preload=True)
+#raw3 = mne.io.read_raw_edf(Recording3, preload=True)
+#raw4 = mne.io.read_raw_edf(Recording4, preload=True)
+
+#raw.append(raw2,preload=True)
+#raw.append(raw3,preload=True)
+#raw.append(raw4,preload=True)
+
+print('\n\t============ BDF file info ============\n')
+print(raw.info)
+print('\n')
+
+#raw.plot_psds(tmin=100.0,tmax=101.0,fmin=1,fmax=40,picks=picks,n_fft=2048)
+
+
 
 # Low-pass filter at 40 Hz, use only for visualisation of raw data (not for analysis)
     # raw.filter(None, 40)  # Low-pass filter
 
 # Electrodes used for processing
-picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
+#picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
     # picks = None # Uses all electrodes
-#picks = [4,5,9] # NOTE For quick development
+picks = [47, 12, 48, 49, 32] # NOTE For quick development (central electrodes)
 print 'Electrodes used:', picks
 
 # Baseline
-baseline = [0,1] # means from the first instant to t = 0
+baseline = [-0.1,0] # means from the first instant to t = 0
 
 # Event time for data analysis
     # Event Times : events[:,0]/2048
@@ -76,10 +74,10 @@ execfile('Process/epochs.py')
 # ======= Frequency =======
 
 n_cycles = 2  # number of cycles in Morlet wavelet
-frequencies = np.arange(2, 40, 2) # frequencies of interest
 f_min,f_max = 2.0, 40.0
+frequencies = np.arange(f_min, f_max, 2) # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz
-picks_tfr = [0] # Electrode from picks used for graphs # From 0 to len(picks)-1
+picks_tfr = range(len(picks)) # Electrode from picks used for graphs # From 0 to len(picks)-1
 
 execfile('Process/frequency.py')
 
