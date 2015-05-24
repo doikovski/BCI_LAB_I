@@ -80,7 +80,7 @@ Fs = raw.info['sfreq']  # sampling in Hz
 picks_tfr = range(len(picks)) # Electrode from picks used for graphs # From 0 to len(picks)-1
 
 t_step = 0.1
-t_window = [0.2]
+t_window = [0.2,0.3]
 steps = 25
 
 execfile('Process/frequency.py')

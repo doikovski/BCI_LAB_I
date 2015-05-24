@@ -102,6 +102,7 @@ print('DONE: PSDE\n')
 
 epoch_sit_data = epoch_sit.get_data()
 PSDE_sit = [[None for i in range(steps)] for j in range(len(t_window))]
+PSDE_stand = [[None for i in range(steps)] for j in range(len(t_window))]
 
 window_n = 0
 
@@ -109,8 +110,8 @@ for window in t_window:
     for step in range(steps):
         
         # Times
-        start = int( (np.abs(tmin) + step*t_step ) * Fs)
-        end = int( (np.abs(tmin) + step*t_step + window ) * Fs)
+        start = int( (np.abs(tmin) + step*t_step ) * Fs )
+        end = int( (np.abs(tmin) + step*t_step + window ) * Fs )
         
         # Crop time
         epoch_sit_data_crop = epoch_sit_data[:,:,start:end]
@@ -126,7 +127,9 @@ for window in t_window:
         
         # Storage
         PSDE_sit[window_n][step]= PSDE_sit_transform
+        PSDE_stand[window_n][step]= PSDE_stand_transform
         
     window_n += 1
 
 PSDE_sit = np.asarray(PSDE_sit)
+PSDE_stand = np.asarray(PSDE_stand)
