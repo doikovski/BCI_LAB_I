@@ -21,13 +21,6 @@ epochs = mne.Epochs(raw,
 		    on_missing='error', 
 		    verbose=None)
 
-# VERY LONG, DOESN'T WORK
-# epochs = mne.Epochs(raw, events, event_id, tmin, tmax)
-
-# Save epochs to avoid recalculating later
-    # epochs.save('epochs.fif')
-    # saved_epochs = mne.read_epochs('sample-epo.fif')
-
 print('\n')
 print(epochs)
 print('\n\n')
