@@ -10,7 +10,7 @@ import sklearn.decomposition as skd
 import sklearn.svm as svm
 
 # FLAGS
-FLAG_PLOT = True
+FLAG_PLOT = False
 plt.ion()
 
 # ======= NOTE =======
@@ -22,7 +22,7 @@ plt.ion()
 # ======= BDF file =======
 
 # File path and reading
-Recording1 = 'Process/Recording2.bdf'
+Recording1 = 'Process/Recording4.bdf'
     # Used paths: Process/Recording.bdf
 
 raw = mne.io.read_raw_edf(Recording1, preload=True)
@@ -52,12 +52,12 @@ picks = [47, 12, 48, 49, 32] # NOTE For quick development (central electrodes)
 print 'Electrodes used:', picks
 
 # Baseline
-baseline = [-0.1,0] # means from the first instant to t = 0
+baseline = [0,0.1] # means from the first instant to t = 0
 
 # Event time for data analysis
     # Event Times : events[:,0]/2048
     # Event types : events[:,2]
-tmin, tmax = -2, 5 # in secoonds
+tmin, tmax = 0, 0.5 # in secoonds
 sampling_time = 2048
 
 # Spatial filtering
@@ -73,7 +73,7 @@ execfile('Process/epochs.py')
 
 # ======= Frequency =======
 
-n_cycles = 2  # number of cycles in Morlet wavelet
+n_cycles = 0.1  # number of cycles in Morlet wavelet
 f_min,f_max = 2.0, 40.0
 frequencies = np.arange(f_min, f_max, 2) # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz

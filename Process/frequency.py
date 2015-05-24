@@ -22,7 +22,7 @@ print('Plotting TFT Morlet graphs')
 
 if FLAG_PLOT:
     fig_power_sit = power_sit.plot(picks=picks_tfr, # From 0 to n_electrodes_used-1
-                                tmin=-1, tmax=3, 
+                                #tmin=-1, tmax=3, 
                                 #fmin=00, fmax=30, 
                                 #vmin=0, vmax=0.0000001, 
                                 vmin=-250,vmax=-150,
@@ -48,45 +48,50 @@ PSDE = mne.decoding.PSDEstimator(sfreq=Fs,
                             fmin=f_min, fmax=f_max, 
                             bandwidth=None, 
                             adaptive=False, 
-                            low_bias=True, 
+                            low_bias=False, 
                             n_jobs=1, 
                             normalization='length', 
                             verbose=None)
 
+epoch_sit_padded = epoch_sit.get_data()
+epoch_stand_padded = epoch_stand.get_data()
+
+epoch_sit_padded=np.pad(epoch_sit_padded, ((0,0),(0,0),(0,1000)), 'constant')
+epoch_stand_padded=np.pad(epoch_stand_padded, ((0,0),(0,0),(0,1000)), 'constant')
+
 #PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
-PSDE_sit_transform = PSDE.transform(epoch_sit.get_data())
+PSDE_sit_transform = PSDE.transform(epoch_sit_padded)
 # [Numnber of event iterations (10)][Pick (Electrode)][amplitude] 
 
-PSDE_stand_transform = PSDE.transform(epoch_stand.get_data())
+PSDE_stand_transform = PSDE.transform(epoch_stand_padded)
 
-# Nomalisation
-#
+###Nomalisation
 #for i in range(len(PSDE_sit_transform)):
-#    for j in range(len(picks)):
-#        PSDE_sit_transform[i][j] /= PSDE_sit_transform[i][j].std()
-#        
+   #for j in range(len(picks)):
+       #PSDE_sit_transform[i][j] /= PSDE_sit_transform[i][j].std()
+       
 #for i in range(len(PSDE_stand_transform)):
-#    for j in range(len(picks)):
-#        PSDE_stand_transform[i][j] /= PSDE_stand_transform[i][j].std()
-        
+   #for j in range(len(picks)):
+       #PSDE_stand_transform[i][j] /= PSDE_stand_transform[i][j].std()
 
-if FLAG_PLOT:
-    plt.figure()
-    plot_freq = range(len(PSDE_sit_transform[0][0]))
-    for i in range(len(PSDE_sit_transform[0][0])):
-        plot_freq[i] *= 1.0
-        plot_freq[i] /= float(len(plot_freq))
-        plot_freq[i] *= f_max-f_min
-        plot_freq[i] += f_min
-    
-    for i in range(len(PSDE_sit_transform)):
-        plt.plot(plot_freq,PSDE_sit_transform[i][0],label=i)
-    
-    plt.xlim([f_min,f_max])
-    plt.legend()
-    plt.title('sit PSDE for electrode 0')
-    plt.xlabel('Frequency')
-    plt.ylabel('Amplitude')
-    plt.show(block=False)
+if True: #FLAG_PLOT:
+    for j in range(len(picks)):
+        plt.figure()
+        plot_freq = range(len(PSDE_sit_transform[0][0]))
+        for i in range(len(PSDE_sit_transform[0][0])):
+            plot_freq[i] *= 1.0
+            plot_freq[i] /= float(len(plot_freq))
+            plot_freq[i] *= f_max-f_min
+            plot_freq[i] += f_min
+        
+        for i in range(len(PSDE_sit_transform)):
+            plt.plot(plot_freq,PSDE_sit_transform[i][j],label=i)
+        
+        plt.xlim([f_min,f_max])
+        plt.legend()
+        plt.title('Sit PSDE for electrode %i' %j)
+        plt.xlabel('Frequency')
+        plt.ylabel('Amplitude')
+        plt.show(block=False)
 
 print('DONE: PSDE\n')
