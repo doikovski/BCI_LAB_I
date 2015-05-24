@@ -57,7 +57,7 @@ baseline = [0,0.1] # means from the first instant to t = 0
 # Event time for data analysis
     # Event Times : events[:,0]/2048
     # Event types : events[:,2]
-tmin, tmax = 0, 0.5 # in secoonds
+tmin, tmax = -2, 5 # in secoonds
 sampling_time = 2048
 
 # Spatial filtering
@@ -74,10 +74,14 @@ execfile('Process/epochs.py')
 # ======= Frequency =======
 
 n_cycles = 0.1  # number of cycles in Morlet wavelet
-f_min,f_max = 2.0, 40.0
+f_min,f_max = 2.0, 40.0 # tmin must be negative or zero for PSDE in frequency.py
 frequencies = np.arange(f_min, f_max, 2) # frequencies of interest
 Fs = raw.info['sfreq']  # sampling in Hz
 picks_tfr = range(len(picks)) # Electrode from picks used for graphs # From 0 to len(picks)-1
+
+t_step = 0.1
+t_window = [0.2]
+steps = 25
 
 execfile('Process/frequency.py')
 

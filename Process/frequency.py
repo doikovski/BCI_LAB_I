@@ -53,15 +53,14 @@ PSDE = mne.decoding.PSDEstimator(sfreq=Fs,
                             normalization='length', 
                             verbose=None)
 
-epoch_sit_padded = epoch_sit.get_data()
-epoch_stand_padded = epoch_stand.get_data()
+epoch_sit_data = epoch_sit.get_data()
+epoch_stand_data = epoch_stand.get_data()
 
-epoch_sit_padded=np.pad(epoch_sit_padded, ((0,0),(0,0),(0,1000)), 'constant')
-epoch_stand_padded=np.pad(epoch_stand_padded, ((0,0),(0,0),(0,1000)), 'constant')
+epoch_sit_padded=np.pad(epoch_sit_data, ((0,0),(0,0),(0,1000)), 'constant')
+epoch_stand_padded=np.pad(epoch_stand_data, ((0,0),(0,0),(0,1000)), 'constant')
 
 #PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
-PSDE_sit_transform = PSDE.transform(epoch_sit_padded)
-# [Numnber of event iterations (10)][Pick (Electrode)][amplitude] 
+PSDE_sit_transform = PSDE.transform(epoch_sit_padded) # [Numnber of event iterations (10)][Pick (Electrode)][amplitude] 
 
 PSDE_stand_transform = PSDE.transform(epoch_stand_padded)
 
@@ -95,3 +94,39 @@ if True: #FLAG_PLOT:
         plt.show(block=False)
 
 print('DONE: PSDE\n')
+
+# General matrix containing all data
+# PSDE_sit[Events][Windows_size][Steps][Electrode][Freq amplitude]
+
+# PSDE_sit[Events][Electrode][Freq amplitude][Windows_size][Steps]
+
+epoch_sit_data = epoch_sit.get_data()
+PSDE_sit = [[None for i in range(steps)] for j in range(len(t_window))]
+
+window_n = 0
+
+for window in t_window:
+    for step in range(steps):
+        
+        # Times
+        start = int( (np.abs(tmin) + step*t_step ) * Fs)
+        end = int( (np.abs(tmin) + step*t_step + window ) * Fs)
+        
+        # Crop time
+        epoch_sit_data_crop = epoch_sit_data[:,:,start:end]
+        epoch_stand_data_crop = epoch_stand_data[:,:,start:end]
+        
+        # Padding
+        epoch_sit_padded = np.pad(epoch_sit_data_crop, ((0,0),(0,0),(0,1000)), 'constant')
+        epoch_stand_padded = np.pad(epoch_sit_data_crop, ((0,0),(0,0),(0,1000)), 'constant')
+        
+        # PSDE
+        PSDE_sit_transform = PSDE.transform(epoch_sit_padded)
+        PSDE_stand_transform = PSDE.transform(epoch_sit_padded)
+        
+        # Storage
+        PSDE_sit[window_n][step]= PSDE_sit_transform
+        
+    window_n += 1
+
+PSDE_sit = np.asarray(PSDE_sit)
