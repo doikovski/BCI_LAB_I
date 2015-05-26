@@ -1,7 +1,7 @@
 print('\n\t============ Machine learning - Classifications ============\n') 
 
 X = np.asarray(data)
-y = [0 for i in range(10)] + [1 for j in range(10)] # Class
+y = [0 for i in range(40)] + [1 for j in range(40)] # Class
 #+ [0 for i in range(10)] + [1 for j in range(10)]
 
 #svc = svm.SVC(kernel='linear', C=C).fit(X, y)
@@ -21,9 +21,10 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, (x_max-x_min)/res),
 #plt.subplot(2, 2, i + 1)
 #plt.subplots_adjust(wspace=0.4, hspace=0.4)
 
+print 'TESTING\n'
+
 testing = classifier.predict(X) # Testing: Predict for a point example: X[40:60]
 
-print 'TESTING\n'
 print 'Test result:',testing
 
 # Put the result into a color plot

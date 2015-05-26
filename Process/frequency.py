@@ -56,8 +56,8 @@ PSDE = mne.decoding.PSDEstimator(sfreq=Fs,
 epoch_sit_data = epoch_sit.get_data()
 epoch_stand_data = epoch_stand.get_data()
 
-epoch_sit_padded=np.pad(epoch_sit_data, ((0,0),(0,0),(0,1000)), 'constant')
-epoch_stand_padded=np.pad(epoch_stand_data, ((0,0),(0,0),(0,1000)), 'constant')
+epoch_sit_padded = np.pad(epoch_sit_data, ((0,0),(0,0),(0,1000)), 'constant')
+epoch_stand_padded = np.pad(epoch_stand_data, ((0,0),(0,0),(0,1000)), 'constant')
 
 #PSDE_sit_fit = PSDE.fit(epoch_sit.get_data(),'SIT')
 PSDE_sit_transform = PSDE.transform(epoch_sit_padded) # [Numnber of event iterations (10)][Pick (Electrode)][amplitude] 
@@ -73,7 +73,7 @@ PSDE_stand_transform = PSDE.transform(epoch_stand_padded)
    #for j in range(len(picks)):
        #PSDE_stand_transform[i][j] /= PSDE_stand_transform[i][j].std()
 
-if True: #FLAG_PLOT:
+if FLAG_PLOT:
     for j in range(len(picks)):
         plt.figure()
         plot_freq = range(len(PSDE_sit_transform[0][0]))
@@ -93,12 +93,32 @@ if True: #FLAG_PLOT:
         plt.ylabel('Amplitude')
         plt.show(block=False)
 
+    for j in range(len(picks)):
+        plt.figure()
+        plot_freq = range(len(PSDE_sit_transform[0][0]))
+        for i in range(len(PSDE_sit_transform[0][0])):
+            plot_freq[i] *= 1.0
+            plot_freq[i] /= float(len(plot_freq))
+            plot_freq[i] *= f_max-f_min
+            plot_freq[i] += f_min
+            
+        for i in range(len(PSDE_stand_transform)):
+            plt.plot(plot_freq,PSDE_stand_transform[i][j],label=i)
+        
+        plt.xlim([f_min,f_max])
+        plt.legend()
+        plt.title('Stand PSDE for electrode %i' %j)
+        plt.xlabel('Frequency')
+        plt.ylabel('Amplitude')
+        plt.show(block=False)
+
 print('DONE: PSDE\n')
 
 # General matrix containing all data
 # PSDE_sit[Events][Windows_size][Steps][Electrode][Freq amplitude]
 
 # PSDE_sit[Events][Electrode][Freq amplitude][Windows_size][Steps]
+
 
 epoch_sit_data = epoch_sit.get_data()
 PSDE_sit = [[None for i in range(steps)] for j in range(len(t_window))]
@@ -118,12 +138,12 @@ for window in t_window:
         epoch_stand_data_crop = epoch_stand_data[:,:,start:end]
         
         # Padding
-        epoch_sit_padded = np.pad(epoch_sit_data_crop, ((0,0),(0,0),(0,1000)), 'constant')
-        epoch_stand_padded = np.pad(epoch_sit_data_crop, ((0,0),(0,0),(0,1000)), 'constant')
+        epoch_sit_padded = np.pad(epoch_sit_data_crop, ((0,0),(0,0),(0,10000)), 'constant')
+        epoch_stand_padded = np.pad(epoch_stand_data_crop, ((0,0),(0,0),(0,10000)), 'constant')
         
         # PSDE
         PSDE_sit_transform = PSDE.transform(epoch_sit_padded)
-        PSDE_stand_transform = PSDE.transform(epoch_sit_padded)
+        PSDE_stand_transform = PSDE.transform(epoch_stand_padded)
         
         # Storage
         PSDE_sit[window_n][step]= PSDE_sit_transform
@@ -133,3 +153,50 @@ for window in t_window:
 
 PSDE_sit = np.asarray(PSDE_sit)
 PSDE_stand = np.asarray(PSDE_stand)
+
+
+if False:
+    for j in range(len(picks)):
+        plt.figure()
+        plot_freq = range(len(PSDE_sit_transform[0][0]))
+        for i in range(len(PSDE_sit_transform[0][0])):
+            plot_freq[i] *= 1.0
+            plot_freq[i] /= float(len(plot_freq))
+            plot_freq[i] *= f_max-f_min
+            plot_freq[i] += f_min
+        
+        for i in range(len(PSDE_sit_transform)):
+            plt.plot(plot_freq,PSDE_sit_transform[i][j],label=i)
+        
+        plt.xlim([f_min,f_max])
+        plt.legend()
+        plt.title('Sit PSDE for electrode %i' %j)
+        plt.xlabel('Frequency')
+        plt.ylabel('Amplitude')
+        plt.show(block=False)
+
+    for j in range(len(picks)):
+        plt.figure()
+        plot_freq = range(len(PSDE_sit_transform[0][0]))
+        for i in range(len(PSDE_sit_transform[0][0])):
+            plot_freq[i] *= 1.0
+            plot_freq[i] /= float(len(plot_freq))
+            plot_freq[i] *= f_max-f_min
+            plot_freq[i] += f_min
+            
+        for i in range(len(PSDE_stand_transform)):
+            plt.plot(plot_freq,PSDE_stand_transform[i][j],label=i)
+        
+        plt.xlim([f_min,f_max])
+        plt.legend()
+        plt.title('Stand PSDE for electrode %i' %j)
+        plt.xlabel('Frequency')
+        plt.ylabel('Amplitude')
+        plt.show(block=False)
+
+print('DONE: PSDE\n')
+
+del epoch_sit_data
+del epoch_stand_data
+del epoch_sit_padded
+del epoch_stand_padded

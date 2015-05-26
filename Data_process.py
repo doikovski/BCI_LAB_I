@@ -22,17 +22,19 @@ plt.ion()
 # ======= BDF file =======
 
 # File path and reading
-Recording1 = 'Process/Recording4.bdf'
-    # Used paths: Process/Recording.bdf
+Recording1 = 'Process/Recording1.bdf'
+Recording2 = 'Process/Recording2.bdf'
+Recording3 = 'Process/Recording3.bdf'
+Recording4 = 'Process/Recording4.bdf'
 
-raw = mne.io.read_raw_edf(Recording1, preload=True)
-#raw2 = mne.io.read_raw_edf(Recording2, preload=True)
-#raw3 = mne.io.read_raw_edf(Recording3, preload=True)
-#raw4 = mne.io.read_raw_edf(Recording4, preload=True)
+raw = mne.io.read_raw_edf(Recording4, preload=True)
+raw2 = mne.io.read_raw_edf(Recording2, preload=True)
+raw3 = mne.io.read_raw_edf(Recording3, preload=True)
+raw4 = mne.io.read_raw_edf(Recording4, preload=True)
 
-#raw.append(raw2,preload=True)
-#raw.append(raw3,preload=True)
-#raw.append(raw4,preload=True)
+raw.append(raw2,preload=True)
+raw.append(raw3,preload=True)
+raw.append(raw4,preload=True)
 
 print('\n\t============ BDF file info ============\n')
 print(raw.info)
@@ -46,9 +48,9 @@ print('\n')
     # raw.filter(None, 40)  # Low-pass filter
 
 # Electrodes used for processing
-#picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
+picks = [4,5,9,10,11,12,13,14,17,18,19,20,21,31,32,38,39,40,44,45,46,47,48,49,50,51,54,55,56,57,58] # Electrodes for motor imagery
     # picks = None # Uses all electrodes
-picks = [47, 12, 48, 49, 32] # NOTE For quick development (central electrodes)
+#picks = [47, 12, 48, 49, 32] # NOTE For quick development (central electrodes)
 print 'Electrodes used:', picks
 
 # Baseline
@@ -80,8 +82,8 @@ Fs = raw.info['sfreq']  # sampling in Hz
 picks_tfr = range(len(picks)) # Electrode from picks used for graphs # From 0 to len(picks)-1
 
 t_step = 0.1
-t_window = [0.2,0.3]
-steps = 25
+t_window = [1.0]
+steps = 1
 
 execfile('Process/frequency.py')
 

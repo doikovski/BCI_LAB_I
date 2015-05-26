@@ -11,3 +11,5 @@ CAR = raw_data.mean(axis=0) # mean along electrodes axis
 for i in picks_spatial_filter: # apply spacial filter
     raw.apply_function(CAR_raw, picks=[i], dtype=None, n_jobs=1)
 
+del raw_data
+del CAR
