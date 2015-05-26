@@ -27,12 +27,12 @@ Recording2 = 'Process/Recording2.bdf'
 Recording3 = 'Process/Recording3.bdf'
 Recording4 = 'Process/Recording4.bdf'
 
-raw = mne.io.read_raw_edf(Recording4, preload=True)
-raw2 = mne.io.read_raw_edf(Recording2, preload=True)
+raw = mne.io.read_raw_edf(Recording1, preload=True)
+#raw2 = mne.io.read_raw_edf(Recording2, preload=True)
 raw3 = mne.io.read_raw_edf(Recording3, preload=True)
 raw4 = mne.io.read_raw_edf(Recording4, preload=True)
 
-raw.append(raw2,preload=True)
+#raw.append(raw2,preload=True)
 raw.append(raw3,preload=True)
 raw.append(raw4,preload=True)
 

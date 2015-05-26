@@ -28,7 +28,7 @@ data_ml = np.concatenate((PSDE_sit_transform.reshape((s0,s1*s2)),PSDE_stand_tran
 #data_ml = np.append(a,b).reshape((20,5*30))
 #print data_ml
 
-ica = skd.FastICA(random_state=0) # random_state was added else the result changes every time the code is executed
+ica = skd.FastICA() # random_state was added else the result changes every time the code is executed random_state=0
 
 #ica = skd.PCA() # TEST PCA
 
@@ -36,7 +36,7 @@ ica = skd.FastICA(random_state=0) # random_state was added else the result chang
 #features_stand = ica.fit_transform(stand_data_ml)
 data = ica.fit_transform(data_ml)
 
-data /= data.std(axis=0)
+#data /= data.std(axis=0)
 
 #plt.figure('Features')
 #for i in range(10):
@@ -45,15 +45,15 @@ data /= data.std(axis=0)
 #plt.show(block=False)
 
 #data /= np.std(data)
-
-for axis in range(5):
-    plt.figure()
-    for i in range(10):
-        for j in range(4): # 4 for 4 files
-            k = 10*j + i
-            plt.plot(data[i,axis],data[k,axis+1],'bo')
-    for i in range(10):
-        for j in range(4): # 4 for 4 files
-            k = 40+10*j+i # 40 (instead of first 10) for 4 files
-            plt.plot(data[i,axis],data[k,axis+1],'ro')
-    plt.show(block=False)
+if FLAG_PLOT:
+    for axis in range(5):
+        plt.figure()
+        for i in range(10):
+            for j in range(4): # 4 for 4 files
+                k = 10*j + i
+                plt.plot(data[i,axis],data[k,axis+1],'bo')
+        for i in range(10):
+            for j in range(4): # 4 for 4 files
+                k = 40+10*j+i # 40 (instead of first 10) for 4 files
+                plt.plot(data[i,axis],data[k,axis+1],'ro')
+        plt.show(block=False)
